@@ -6,8 +6,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import com.longtn.foodapplication.adapter.CategoryAdapter;
 import com.longtn.foodapplication.adapter.RecommendedAdapter;
 import com.longtn.foodapplication.model.CategoryModel;
 import com.longtn.foodapplication.model.FoodModel;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 
@@ -31,11 +35,23 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<FoodModel> foodList;
     private EditText searchView;
 
+    private TextView greetingText;
+    private ImageView avatarImage;
+    private Button loginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Ánh xạ các view
+        greetingText = findViewById(R.id.textView5);
+        avatarImage = findViewById(R.id.imageView4);
+        loginButton = findViewById(R.id.loginBtn);
+
+        // Kiểm tra trạng thái đăng nhập và cập nhật UI
+        checkLoginStatus();
 
         recyclerViewCategory();
         recyclerViewPopular();
@@ -74,12 +90,54 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void checkLoginStatus() {
+        // --- GIẢ LẬP TRẠNG THÁI ĐĂNG NHẬP ---
+        // Trong một ứng dụng thực tế, bạn sẽ kiểm tra từ SharedPreferences, Firebase Auth, etc.
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        boolean isUserLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false); // Thay đổi thành true để xem trạng thái đã đăng nhập
 
+        if (isUserLoggedIn) {
+            // Nếu người dùng đã đăng nhập
+            String username = sharedPreferences.getString("username", "User"); // Đọc username, mặc định là "User"
+            greetingText.setText("Hi " + username);
+
+            greetingText.setVisibility(View.VISIBLE);
+            avatarImage.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.GONE);
+            avatarImage.setOnClickListener(v -> {
+                logout();
+            });
+        } else {
+            // Nếu người dùng chưa đăng nhập
+            greetingText.setVisibility(View.GONE);
+            avatarImage.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
+
+            // Kích hoạt nút Login để mở LoginActivity
+            loginButton.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+            });
+        }
+    }
+    private void logout() {
+        // Xóa dữ liệu trong SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear(); // Xóa tất cả dữ liệu đã lưu
+        editor.apply();
+
+        // Khởi động lại MainActivity để cập nhật UI
+        Intent intent = new Intent(MainActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
     private void startSearchResultActivity(String query) {
         ArrayList<FoodModel> filterList = new ArrayList<>();
         for (FoodModel food : foodList) {
             if(food.getTitle().toLowerCase().contains(query.toLowerCase()) ||
-            food.getDescription().toLowerCase().contains(query.toLowerCase())) {
+                    food.getDescription().toLowerCase().contains(query.toLowerCase())) {
                 filterList.add(food);
             }
         }

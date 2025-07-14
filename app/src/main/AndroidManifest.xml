@@ -27,6 +27,13 @@
         <activity android:name=".activity.CartActivity"/>
         <activity android:name=".activity.DetailActivity"/>
         <activity android:name=".activity.SearchResultActivity"/>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
