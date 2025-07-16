@@ -34,6 +34,19 @@
         <activity
             android:name=".activity.SignUpActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.AdminDashboardActivity"
+            android:exported="false"
+            android:label="Trang quản trị Admin" />
+
+        <activity
+            android:name=".activity.FoodManagementActivity"
+            android:exported="false"
+            android:label="Quản lý Món ăn" />
+        <activity
+            android:name=".activity.UserManagementActivity"
+            android:exported="false"
+            android:label="Quản lý người dùng" />
     </application>
 
 </manifest>
