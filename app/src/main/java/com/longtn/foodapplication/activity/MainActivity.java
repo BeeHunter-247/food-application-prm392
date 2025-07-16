@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.longtn.foodapplication.R;
 import com.longtn.foodapplication.adapter.CategoryAdapter;
 import com.longtn.foodapplication.adapter.RecommendedAdapter;
+import com.longtn.foodapplication.helper.ManagementFood;
 import com.longtn.foodapplication.model.CategoryModel;
 import com.longtn.foodapplication.model.FoodModel;
 import android.content.SharedPreferences;
@@ -30,21 +32,22 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private RecyclerView.Adapter adapter, adapter2;
+    private CategoryAdapter adapter; // Giữ nguyên adapter cho Category
+    private RecommendedAdapter adapter2; // <-- THAY ĐỔI QUAN TRỌNG: Đổi kiểu thành RecommendedAdapter
     private RecyclerView recyclerViewCategoryList, recyclerViewPopularList;
-    private ArrayList<FoodModel> foodList;
+    private ArrayList<FoodModel> foodList = new ArrayList<>();
     private EditText searchView;
-
     private TextView greetingText;
     private ImageView avatarImage;
     private Button loginButton;
+    private ManagementFood foodDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
+        foodDataSource = new ManagementFood(this);
         // Ánh xạ các view
         greetingText = findViewById(R.id.textView5);
         avatarImage = findViewById(R.id.imageView4);
@@ -54,11 +57,15 @@ public class MainActivity extends AppCompatActivity {
         checkLoginStatus();
 
         recyclerViewCategory();
-        recyclerViewPopular();
+
         bottomNavigation();
         setupSearchEditText();
     }
-
+    @Override
+    protected void onResume(){
+        super.onResume();
+        loadPopularFoods();
+    }
     private void setupSearchEditText() {
         searchView = findViewById(R.id.searchView);
 
@@ -167,24 +174,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void loadPopularFoods(){
+        if(recyclerViewPopularList == null){
+            recyclerViewPopularList = findViewById(R.id.RecyclePopular);
+            recyclerViewPopularList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            adapter2 = new RecommendedAdapter(foodList);
+            recyclerViewPopularList.setAdapter(adapter2);
+        }
+
+        ArrayList<FoodModel> foodFromDb = (ArrayList<FoodModel>) foodDataSource.getAllFoods();
+
+        adapter2.updateData(foodFromDb);
+    }
     private void recyclerViewPopular() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerViewPopularList = findViewById(R.id.RecyclePopular);
         recyclerViewPopularList.setLayoutManager(linearLayoutManager);
 
-        foodList = new ArrayList<>();
-        foodList.add(new FoodModel("Pepperoni pizza",
-                "pepperoni", "slices pepperoni, mozzarella cheese," +
-                " fresh oregano, ground black pepper, pizza sauce", 13.0, 0,
-                5, 20, 1000));
-        foodList.add(new FoodModel("Cheese Burger",
-                "cheeseburger", "beef, Gouda Cheese, Special sauce," +
-                " Lettuce, Tomato", 15.2, 0,
-                4, 10, 1500));
-        foodList.add(new FoodModel("Vegetable Pizza",
-                "vegetablepizza", "olive, Vegetable oil, pitted Kalamata," +
-                " cherry tomatoes, fresh oregano, basil", 10.0, 0,
-                3, 9, 600));
+        foodList = (ArrayList<FoodModel>) foodDataSource.getAllFoods();
         adapter2 = new RecommendedAdapter(foodList);
         recyclerViewPopularList.setAdapter(adapter2);
     }

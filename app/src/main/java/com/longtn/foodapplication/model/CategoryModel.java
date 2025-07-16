@@ -1,6 +1,7 @@
 package com.longtn.foodapplication.model;
 
 public class CategoryModel {
+
     private String title;
     private String picture;
 

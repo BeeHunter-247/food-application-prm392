@@ -3,6 +3,7 @@ package com.longtn.foodapplication.model;
 import java.io.Serializable;
 
 public class FoodModel implements Serializable {
+    private int id;
     private String title;
     private String picture;
     private String description;
@@ -12,7 +13,8 @@ public class FoodModel implements Serializable {
     private int time;
     private int calories;
 
-    public FoodModel(String title, String picture, String description, Double price, int numberInCart, int star, int time, int calories) {
+    public FoodModel(int id,  String title, String picture, String description, Double price, int numberInCart, int star, int time, int calories) {
+        this.id = id;
         this.title = title;
         this.picture = picture;
         this.description = description;
@@ -21,6 +23,17 @@ public class FoodModel implements Serializable {
         this.star = star;
         this.time = time;
         this.calories = calories;
+    }
+    public FoodModel() {
+        // Constructor này không cần làm gì cả
+    }
+
+    public int getId() { // <-- ĐỔI TỪ long SANG int
+        return id;
+    }
+
+    public void setId(int id) { // <-- ĐỔI TỪ long SANG int
+        this.id = id;
     }
 
     public String getTitle() {

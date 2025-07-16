@@ -70,4 +70,9 @@ public class RecommendedAdapter extends RecyclerView.Adapter<RecommendedAdapter.
             addBtn = itemView.findViewById(R.id.addBtn);
         }
     }
+    public void updateData(ArrayList<FoodModel> newFoodList) {
+        this.recommendedList.clear();
+        this.recommendedList.addAll(newFoodList);
+        notifyDataSetChanged(); // Báo cho RecyclerView biết dữ liệu đã thay đổi để vẽ lại
+    }
 }

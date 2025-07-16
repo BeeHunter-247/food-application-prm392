@@ -49,26 +49,25 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showLoginSuccess() {
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-
         String userEmail = edtEmail.getText().toString().trim();
 
-        // 1. Khởi tạo ManagementUser để truy vấn database
         ManagementUser managementUser = new ManagementUser(this);
-
-        // 2. Lấy thông tin chi tiết của người dùng (bao gồm cả tên) bằng email
         HashMap<String, String> userDetails = managementUser.getUserByEmail(userEmail);
-        String userName = userDetails.get("name"); // Lấy tên từ kết quả trả về
+        String userName = userDetails.get("name");
 
-        // 3. Lưu TÊN người dùng thay vì email vào SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isLoggedIn", true);
-        editor.putString("username", userName); // <-- THAY ĐỔI QUAN TRỌNG Ở ĐÂY
+        editor.putString("username", userName);
         editor.apply();
 
-        // Chuyển về MainActivity
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent;
+        if ("admin@gmail.com".equalsIgnoreCase(userEmail)) {
+            intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
+        } else {
+            intent = new Intent(LoginActivity.this, MainActivity.class);
+        }
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
