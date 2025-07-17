@@ -3,6 +3,7 @@ package com.longtn.foodapplication.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,8 +35,16 @@ public class FoodAdminAdapter extends RecyclerView.Adapter<FoodAdminAdapter.Food
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int position) {
         FoodModel food = foodList.get(position);
+        int imageResId = holder.itemView.getContext().getResources().getIdentifier(
+                food.getPicture(), "drawable", holder.itemView.getContext().getPackageName());
         holder.tvFoodTitle.setText(food.getTitle());
         holder.tvFoodPrice.setText(String.format("%,.0f VND", food.getPrice()));
+
+        if (imageResId != 0) {
+            holder.imgFood.setImageResource(imageResId);
+        } else {
+            holder.imgFood.setImageResource(R.drawable.ic_placeholder); // fallback
+        }
 
         // Nhấn vào item để Sửa
         holder.itemView.setOnClickListener(v -> listener.onEditClick(food));
@@ -56,10 +65,12 @@ public class FoodAdminAdapter extends RecyclerView.Adapter<FoodAdminAdapter.Food
 
     static class FoodViewHolder extends RecyclerView.ViewHolder {
         TextView tvFoodTitle, tvFoodPrice;
+        ImageView imgFood;
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
             tvFoodTitle = itemView.findViewById(R.id.tv_food_title);
             tvFoodPrice = itemView.findViewById(R.id.tv_food_price);
+            imgFood = itemView.findViewById(R.id.img_food);
         }
     }
 }
