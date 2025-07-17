@@ -59,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("isLoggedIn", true);
         editor.putString("username", userName);
+        editor.putString("userEmail", userEmail);
         editor.apply();
 
         Intent intent;

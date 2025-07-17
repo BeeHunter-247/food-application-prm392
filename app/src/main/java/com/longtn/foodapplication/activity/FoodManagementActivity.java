@@ -59,14 +59,14 @@ public class FoodManagementActivity extends AppCompatActivity implements FoodAdm
     @Override
     public void onDeleteClick(FoodModel food) {
         new AlertDialog.Builder(this)
-                .setTitle("Xóa món ăn")
-                .setMessage("Bạn có chắc chắn muốn xóa " + food.getTitle() + "?")
-                .setPositiveButton("Xóa", (dialog, which) -> {
+                .setTitle("Delete food")
+                .setMessage("Are you sure you want to delete " + food.getTitle() + "?")
+                .setPositiveButton("Delete", (dialog, which) -> {
                     dataSource.deleteFood(food.getId());
-                    Toast.makeText(this, "Đã xóa món ăn", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Deleted food item", Toast.LENGTH_SHORT).show();
                     loadFoods();
                 })
-                .setNegativeButton("Hủy", null)
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 
@@ -110,7 +110,7 @@ public class FoodManagementActivity extends AppCompatActivity implements FoodAdm
 
             // Kiểm tra các trường bắt buộc
             if (title.isEmpty() || priceStr.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập ít nhất Tên và Giá", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter at least the Name and Price", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -133,10 +133,10 @@ public class FoodManagementActivity extends AppCompatActivity implements FoodAdm
             // Lưu vào database
             if (food == null) { // Chế độ thêm mới
                 dataSource.addFood(newOrUpdatedFood);
-                Toast.makeText(this, "Thêm món ăn thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Added food successfully.", Toast.LENGTH_SHORT).show();
             } else { // Chế độ sửa
                 dataSource.updateFood(newOrUpdatedFood);
-                Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Successfully updated.", Toast.LENGTH_SHORT).show();
             }
 
             loadFoods(); // Tải lại danh sách để hiển thị thay đổi

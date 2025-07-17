@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
     private void bottomNavigation() {
         LinearLayout homeBtn = findViewById(R.id.homeBtn);
         LinearLayout carBtnMain = findViewById(R.id.cardBtnMain);
+        LinearLayout profileBtn = findViewById(R.id.profileBtn);
 
         homeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,6 +171,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, CartActivity.class));
+            }
+        });
+        profileBtn.setOnClickListener(v -> {
+            // Kiểm tra xem người dùng đã đăng nhập chưa
+            SharedPreferences sharedPreferences = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+            if (sharedPreferences.getBoolean("isLoggedIn", false)) {
+                // Nếu đã đăng nhập, mở trang Profile
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            } else {
+                // Nếu chưa, yêu cầu đăng nhập
+                Toast.makeText(MainActivity.this, "Please log in to view the information", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
     }

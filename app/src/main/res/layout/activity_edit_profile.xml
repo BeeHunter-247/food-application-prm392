@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    android:fitsSystemWindows="true"
+    android:padding="16dp">
+
+    <!-- Thanh tiêu đề -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp">
+        <ImageView
+            android:id="@+id/iv_edit_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:padding="8dp"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Profile"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <!-- Ảnh đại diện -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="32dp">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/avatar"/>
+    </LinearLayout>
+
+    <!-- Form sửa thông tin -->
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="FULL NAME" android:textSize="12sp" android:layout_marginStart="8dp"/>
+    <EditText
+        android:id="@+id/et_edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/info_card_background"
+        android:paddingHorizontal="16dp"
+        android:layout_marginTop="4dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="EMAIL" android:textSize="12sp" android:layout_marginTop="16dp" android:layout_marginStart="8dp"/>
+    <EditText
+        android:id="@+id/et_edit_email"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/info_card_background"
+        android:paddingHorizontal="16dp"
+        android:layout_marginTop="4dp"
+        android:inputType="textEmailAddress"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btn_save_profile"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="SAVE"
+        android:backgroundTint="#FF5722"
+        android:textSize="18sp"/>
+
+</LinearLayout>

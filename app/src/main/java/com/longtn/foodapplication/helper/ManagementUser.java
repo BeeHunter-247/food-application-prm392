@@ -60,18 +60,31 @@ public class ManagementUser {
     public HashMap<String, String> getUserByEmail(String email) {
         HashMap<String, String> user = new HashMap<>();
         SQLiteDatabase db = this.dbHelper.getReadableDatabase();
+        // Thêm cột ID vào danh sách cột cần lấy
         Cursor cursor = db.query(DatabaseHelper.TABLE_USERS,
                 new String[]{DatabaseHelper.COLUMN_USER_ID, DatabaseHelper.COLUMN_USER_NAME, DatabaseHelper.COLUMN_USER_EMAIL},
                 DatabaseHelper.COLUMN_USER_EMAIL + "=?",
                 new String[]{email}, null, null, null);
 
         if (cursor.moveToFirst()) {
+            user.put("id", cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_ID)));
             user.put("name", cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_NAME)));
             user.put("email", cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_EMAIL)));
         }
         cursor.close();
         db.close();
         return user;
+    }
+    public int updateUserProfile(int userId, String newName, String newEmail) {
+        SQLiteDatabase db = this.dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_USER_NAME, newName);
+        values.put(DatabaseHelper.COLUMN_USER_EMAIL, newEmail);
+
+        int rowsAffected = db.update(DatabaseHelper.TABLE_USERS, values, DatabaseHelper.COLUMN_USER_ID + " = ?",
+                new String[]{String.valueOf(userId)});
+        db.close();
+        return rowsAffected;
     }
     public List<HashMap<String, String>> getAllUsers() {
         List<HashMap<String, String>> userList = new ArrayList<>();
