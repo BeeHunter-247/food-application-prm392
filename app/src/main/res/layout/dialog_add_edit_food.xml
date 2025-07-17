@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="#FFF3E0">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,57 +14,88 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Thêm/Sửa Món Ăn"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="#FF9800"
             android:layout_gravity="center"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <EditText
             android:id="@+id/et_food_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên món ăn"/>
+            android:hint="Tên món ăn"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
         <EditText
             android:id="@+id/et_food_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mô tả"/>
+            android:hint="Mô tả"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
         <EditText
             android:id="@+id/et_food_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tên file ảnh (ví dụ: pepperoni)"/>
+            android:hint="Tên file ảnh (ví dụ: pepperoni)"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
         <EditText
             android:id="@+id/et_food_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Giá"/>
+            android:hint="Giá"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
         <EditText
             android:id="@+id/et_food_star"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
-            android:hint="Số sao (ví dụ: 4.5)"/>
+            android:hint="Số sao (ví dụ: 4.5)"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
         <EditText
             android:id="@+id/et_food_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Thời gian (phút)"/>
+            android:hint="Thời gian (phút)"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp" />
+
         <EditText
             android:id="@+id/et_food_calories"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:hint="Calories"/>
+            android:hint="Calories"
+            android:background="@drawable/bg_input_orange"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp" />
 
         <Button
             android:id="@+id/btn_save_food"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="16dp"
-            android:text="Lưu"/>
+            android:text="Lưu"
+            android:background="@drawable/bg_button_orange"
+            android:textColor="@android:color/white"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="12dp" />
     </LinearLayout>
 </ScrollView>
