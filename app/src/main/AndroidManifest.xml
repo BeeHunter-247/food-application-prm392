@@ -47,6 +47,14 @@
             android:name=".activity.UserManagementActivity"
             android:exported="false"
             android:label="Quản lý người dùng" />
+        <activity
+            android:name=".activity.EditProfileActivity"
+            android:exported="false"
+            android:label="Sửa thông tin cá nhân" />
+        <activity
+            android:name=".activity.ProfileActivity"
+            android:exported="false"
+            android:label="Thông tin cá nhân" />
     </application>
 
 </manifest>

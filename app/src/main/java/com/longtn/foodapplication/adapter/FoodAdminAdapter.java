@@ -38,7 +38,7 @@ public class FoodAdminAdapter extends RecyclerView.Adapter<FoodAdminAdapter.Food
         int imageResId = holder.itemView.getContext().getResources().getIdentifier(
                 food.getPicture(), "drawable", holder.itemView.getContext().getPackageName());
         holder.tvFoodTitle.setText(food.getTitle());
-        holder.tvFoodPrice.setText(String.format("%,.0f VND", food.getPrice()));
+        holder.tvFoodPrice.setText(String.format("$%,.2f ", food.getPrice()));
 
         if (imageResId != 0) {
             holder.imgFood.setImageResource(imageResId);
