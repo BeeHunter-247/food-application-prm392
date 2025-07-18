@@ -3,6 +3,7 @@ package com.longtn.foodapplication.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,9 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
         holder.tvTitle.setText(item.foodTitle);
         holder.tvQuantity.setText("x" + item.quantity);
         holder.tvPrice.setText(String.format("$%.0f", item.price));
+        int resId = holder.itemView.getContext().getResources()
+                .getIdentifier(item.foodImage, "drawable", holder.itemView.getContext().getPackageName());
+
     }
 
     @Override
@@ -42,12 +46,15 @@ public class OrderItemAdapter extends RecyclerView.Adapter<OrderItemAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvQuantity, tvPrice;
+        ImageView ivFoodImage;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_food_title);
             tvQuantity = itemView.findViewById(R.id.tv_food_quantity);
             tvPrice = itemView.findViewById(R.id.tv_food_price);
+            ivFoodImage = itemView.findViewById(R.id.iv_food_image);
         }
     }
 }

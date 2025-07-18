@@ -89,11 +89,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_FOOD_TIME + ", " +
                 COLUMN_FOOD_CALORIES + ") VALUES " +
 
-                "('Pizza Hải sản', 'pizza', 'Pizza với tôm và mực, phô mai béo ngậy', 120000, 5, 20, 600)," +
-                "('Burger Bò Mỹ', 'burger', 'Burger thịt bò nhập khẩu Mỹ, nướng than thơm ngon', 95000, 4, 15, 800)," +
-                "('Xúc xích Đức', 'hotdog', 'Xúc xích Đức truyền thống, ăn kèm bánh mì giòn tan', 75000, 4, 10, 550)," +
-                "('Trà đào cam sả', 'drink', 'Trà đào tươi mát, thanh lọc cơ thể', 45000, 5, 5, 120)," +
-                "('Bánh Donut Dâu', 'donut', 'Donut vị dâu ngọt ngào, phủ kem hấp dẫn', 30000, 4, 7, 350);");
+                "('Pizza Hải sản', 'pizza', 'Pizza với tôm và mực, phô mai béo ngậy', 12, 5, 20, 600)," +
+                "('Burger Bò Mỹ', 'burger', 'Burger thịt bò nhập khẩu Mỹ, nướng than thơm ngon', 25, 4, 15, 800)," +
+                "('Xúc xích Đức', 'hotdog', 'Xúc xích Đức truyền thống, ăn kèm bánh mì giòn tan', 7, 4, 10, 550)," +
+                "('Trà đào cam sả', 'drink', 'Trà đào tươi mát, thanh lọc cơ thể', 5, 5, 5, 120)," +
+                "('Bánh Donut Dâu', 'donut', 'Donut vị dâu ngọt ngào, phủ kem hấp dẫn', 4, 4, 7, 350);");
     }
 
     private static final String CREATE_TABLE_ORDERS = "CREATE TABLE " + TABLE_ORDERS + "("
@@ -139,13 +139,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Order order = new Order(id, total, createdAt);
 
             // ✅ Load items cho order
-            Cursor itemCursor = db.rawQuery("SELECT * FROM order_items WHERE order_id = ?", new String[]{String.valueOf(id)});
+            Cursor itemCursor = db.rawQuery(
+                    "SELECT oi.food_title, oi.quantity, oi.price, f.picture " +
+                            "FROM order_items oi " +
+                            "LEFT JOIN foods f ON oi.food_title = f.title " +
+                            "WHERE oi.order_id = ?",
+                    new String[]{String.valueOf(id)}
+            );
             while (itemCursor.moveToNext()) {
-                String foodTitle = itemCursor.getString(itemCursor.getColumnIndexOrThrow("food_title"));
-                int quantity = itemCursor.getInt(itemCursor.getColumnIndexOrThrow("quantity"));
-                double price = itemCursor.getDouble(itemCursor.getColumnIndexOrThrow("price"));
+                String foodTitle = itemCursor.getString(0);
+                int quantity = itemCursor.getInt(1);
+                double price = itemCursor.getDouble(2);
+                String picture = itemCursor.getString(3); // tên ảnh, ví dụ: "pizza"
 
-                OrderItem item = new OrderItem(foodTitle, quantity, price);
+                OrderItem item = new OrderItem(foodTitle, quantity, price, picture);
                 order.items.add(item);
             }
             itemCursor.close();
