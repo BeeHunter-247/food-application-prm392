@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewCategoryList, recyclerViewPopularList;
     private ArrayList<FoodModel> foodList = new ArrayList<>();
     private EditText searchView;
-    private TextView greetingText, hintSD;
+    private TextView greetingText, hintSD, seeBtn;
     private ImageView avatarImage;
     private Button loginButton;
     private ManagementFood foodDataSource;
@@ -54,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
         avatarImage = findViewById(R.id.imageView4);
         loginButton = findViewById(R.id.loginBtn);
         hintSD = findViewById(R.id.textView6);
+        seeBtn = findViewById(R.id.seeBtn);
+
+        seeBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ActivityListAll.class);
+            startActivity(intent);
+        });
 
         // Kiểm tra trạng thái đăng nhập và cập nhật UI
         checkLoginStatus();
