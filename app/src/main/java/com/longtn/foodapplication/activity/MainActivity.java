@@ -1,6 +1,7 @@
 package com.longtn.foodapplication.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewCategoryList, recyclerViewPopularList;
     private ArrayList<FoodModel> foodList = new ArrayList<>();
     private EditText searchView;
-    private TextView greetingText;
+    private TextView greetingText, hintSD;
     private ImageView avatarImage;
     private Button loginButton;
     private ManagementFood foodDataSource;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         greetingText = findViewById(R.id.textView5);
         avatarImage = findViewById(R.id.imageView4);
         loginButton = findViewById(R.id.loginBtn);
+        hintSD = findViewById(R.id.textView6);
 
         // Kiểm tra trạng thái đăng nhập và cập nhật UI
         checkLoginStatus();
@@ -119,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
             greetingText.setVisibility(View.GONE);
             avatarImage.setVisibility(View.GONE);
             loginButton.setVisibility(View.VISIBLE);
+            hintSD.setTextColor(Color.parseColor("#ECEBE6"));
 
             // Kích hoạt nút Login để mở LoginActivity
             loginButton.setOnClickListener(v -> {
