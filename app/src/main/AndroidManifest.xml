@@ -61,6 +61,9 @@
             android:name=".activity.ProfileActivity"
             android:exported="false"
             android:label="Thông tin cá nhân" />
+
+        <activity android:name=".activity.ActivityListAll"
+            android:exported="false"/>
     </application>
 
 </manifest>
