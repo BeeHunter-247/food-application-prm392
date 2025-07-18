@@ -21,9 +21,10 @@ public class CartActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerViewList;
     private ManagementCart managementCart;
-    private TextView totalPriceText, taxText, deliveryText, totalText, emptyText;
+    private TextView totalPriceText, taxText, deliveryText, totalText, emptyText, checkoutBtn;
     private double tax;
     private ScrollView scrollView;
+    private double totalAmount = 0.0; // dùng để truyền cho VNPAY giả lập
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,39 +37,25 @@ public class CartActivity extends AppCompatActivity {
         initList();
         bottomNavigation();
         calculateCard();
+        handleCheckout(); // thêm dòng này để gắn sự kiện thanh toán
     }
 
     private void bottomNavigation() {
         LinearLayout homeBtn = findViewById(R.id.homeBtn);
         LinearLayout carBtnMain = findViewById(R.id.cartBtnMain);
 
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CartActivity.this, MainActivity.class));
-            }
-        });
+        homeBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, MainActivity.class)));
 
-        carBtnMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CartActivity.this, CartActivity.class));
-            }
-        });
+        carBtnMain.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, CartActivity.class)));
     }
 
     private void initList() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerViewList.setLayoutManager(linearLayoutManager);
-        adapter = new CartAdapter(managementCart.getListCart(), this, new ChangeNumberItemsListener() {
-            @Override
-            public void changed() {
-                calculateCard();
-            }
-        });
-
+        adapter = new CartAdapter(managementCart.getListCart(), this, this::calculateCard);
         recyclerViewList.setAdapter(adapter);
-        if(managementCart.getListCart().isEmpty()) {
+
+        if (managementCart.getListCart().isEmpty()) {
             emptyText.setVisibility(View.VISIBLE);
             scrollView.setVisibility(View.GONE);
         } else {
@@ -81,13 +68,15 @@ public class CartActivity extends AppCompatActivity {
         double percentTax = 0.02;
         double delivery = 10.0;
         tax = Math.round(((managementCart.getTotalPrice() * percentTax) * 100.0)) / 100.0;
-        double total = Math.round((managementCart.getTotalPrice() + tax + delivery) * 100.0) /100.0;
-        double itemTotal = Math.round((managementCart.getTotalPrice() * 100.0)) /100.0;
+        double total = Math.round((managementCart.getTotalPrice() + tax + delivery) * 100.0) / 100.0;
+        double itemTotal = Math.round((managementCart.getTotalPrice() * 100.0)) / 100.0;
 
         totalPriceText.setText("$" + itemTotal);
         taxText.setText("$" + tax);
         deliveryText.setText("$" + delivery);
         totalText.setText("$" + total);
+
+        totalAmount = total; // lưu lại để dùng khi thanh toán
     }
 
     private void initView() {
@@ -98,5 +87,20 @@ public class CartActivity extends AppCompatActivity {
         recyclerViewList = findViewById(R.id.view);
         scrollView = findViewById(R.id.scrollView);
         emptyText = findViewById(R.id.emptyText);
+        checkoutBtn = findViewById(R.id.textView16); // ID của TextView "CheckOut"
+    }
+
+    private void handleCheckout() {
+        checkoutBtn.setOnClickListener(v -> {
+            if (totalAmount <= 0) {
+                // Đơn hàng trống
+                return;
+            }
+
+            Intent intent = new Intent(CartActivity.this, VnPayWebViewActivity.class);
+            intent.putExtra("amount", totalAmount);
+            intent.putExtra("paymentUrl", "file:///android_asset/vnpay_demo.html"); // đường dẫn HTML giả lập
+            startActivity(intent);
+        });
     }
 }

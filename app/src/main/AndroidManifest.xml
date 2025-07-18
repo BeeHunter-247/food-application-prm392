@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -27,6 +30,9 @@
         <activity android:name=".activity.CartActivity"/>
         <activity android:name=".activity.DetailActivity"/>
         <activity android:name=".activity.SearchResultActivity"/>
+        <activity android:name=".activity.VnPayWebViewActivity" />
+        <activity android:name=".activity.OrderDetailActivity" />
+
         <activity
             android:name=".activity.LoginActivity"
             android:exported="false" />

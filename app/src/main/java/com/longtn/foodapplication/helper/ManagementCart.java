@@ -1,6 +1,8 @@
 package com.longtn.foodapplication.helper;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.Toast;
 
 import com.longtn.foodapplication.Interface.ChangeNumberItemsListener;
@@ -68,5 +70,33 @@ public class ManagementCart {
         }
 
         return price;
+    }
+
+    public void saveOrder(String userEmail, double totalPrice) {
+        DatabaseHelper dbHelper = new DatabaseHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // 1. Lưu order
+        ContentValues orderValues = new ContentValues();
+        orderValues.put("user_email", userEmail);
+        orderValues.put("total_price", totalPrice);
+        orderValues.put("created_at", System.currentTimeMillis());
+
+        long orderId = db.insert("orders", null, orderValues);
+
+        // 2. Lưu từng món ăn
+        for (FoodModel food : getListCart()) {
+            ContentValues itemValues = new ContentValues();
+            itemValues.put("order_id", orderId);
+            itemValues.put("food_title", food.getTitle());
+            itemValues.put("quantity", food.getNumberInCart());
+            itemValues.put("price", food.getPrice());
+            db.insert("order_items", null, itemValues);
+        }
+
+        // 3. Xoá giỏ hàng
+        tinyDB.remove("CardList");
+
+        db.close();
     }
 }

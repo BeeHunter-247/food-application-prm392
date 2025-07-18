@@ -15,7 +15,7 @@ import com.longtn.foodapplication.model.FoodModel;
 
 public class DetailActivity extends AppCompatActivity {
     private TextView addToCartBtn, titleTxt, priceTxt, descriptionTxt, numberOrderTxt, totalPriceTxt, startTxt, caloriesTxt, timeTxt;
-    private ImageView plusBtn, minusBtn, picFood;
+    private ImageView plusBtn, minusBtn, picFood, backBtn;
     private FoodModel object;
     private int numberOrder = 1;
     private ManagementCart managementCart;
@@ -48,6 +48,10 @@ public class DetailActivity extends AppCompatActivity {
         timeTxt.setText(object.getTime() + "minutes");
         totalPriceTxt.setText("$" + Math.round(numberOrder * object.getPrice()));
 
+        backBtn.setOnClickListener(v -> {
+            finish();
+        });
+
         plusBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +83,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initView() {
         addToCartBtn = findViewById(R.id.addToCartBtn);
-        titleTxt = findViewById(R.id.timeTxt);
+        titleTxt = findViewById(R.id.titleTxt);
         priceTxt = findViewById(R.id.priceTxt);
         descriptionTxt = findViewById(R.id.descriptionTxt);
         numberOrderTxt = findViewById(R.id.numberItemTxt);
@@ -90,5 +94,6 @@ public class DetailActivity extends AppCompatActivity {
         totalPriceTxt = findViewById(R.id.totalPriceTxt);
         caloriesTxt = findViewById(R.id.caloriesTxt);
         timeTxt = findViewById(R.id.timeTxt);
+        backBtn = findViewById(R.id.backBtn);
     }
 }
