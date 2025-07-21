@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 
     <application
@@ -27,10 +28,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.CartActivity"/>
+        <activity android:name=".activity.CartActivity"
+            android:exported="true"
+            android:label="Merchant Demo"
+            android:launchMode="singleTask">
+
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="demozpdk"
+                android:host="app" />
+        </intent-filter>
+        </activity>
+
         <activity android:name=".activity.DetailActivity"/>
         <activity android:name=".activity.SearchResultActivity"/>
-        <activity android:name=".activity.VnPayWebViewActivity" />
+        <activity android:name=".activity.PaymentNotification" />
         <activity android:name=".activity.OrderDetailActivity" />
 
         <activity

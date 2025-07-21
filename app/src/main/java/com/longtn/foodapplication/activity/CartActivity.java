@@ -2,6 +2,7 @@ package com.longtn.foodapplication.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -17,6 +18,15 @@ import com.longtn.foodapplication.R;
 import com.longtn.foodapplication.adapter.CartAdapter;
 import com.longtn.foodapplication.helper.ManagementCart;
 
+import com.longtn.foodapplication.Api.CreateOrder;
+
+import org.json.JSONObject;
+
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
+
 public class CartActivity extends AppCompatActivity {
     private RecyclerView.Adapter adapter;
     private RecyclerView recyclerViewList;
@@ -24,7 +34,7 @@ public class CartActivity extends AppCompatActivity {
     private TextView totalPriceText, taxText, deliveryText, totalText, emptyText, checkoutBtn;
     private double tax;
     private ScrollView scrollView;
-    private double totalAmount = 0.0; // dùng để truyền cho VNPAY giả lập
+    private double totalAmount = 0.0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,11 +43,17 @@ public class CartActivity extends AppCompatActivity {
 
         managementCart = new ManagementCart(this);
 
+        // Cho phép thực thi API từ main thread (tạm thời cho demo)
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
+
+        // Init SDK ZaloPay
+        ZaloPaySDK.init(2553, Environment.SANDBOX);
+
         initView();
         initList();
         bottomNavigation();
         calculateCard();
-        handleCheckout(); // thêm dòng này để gắn sự kiện thanh toán
+        handleCheckout(); // xử lý thanh toán qua ZaloPay
     }
 
     private void bottomNavigation() {
@@ -45,7 +61,6 @@ public class CartActivity extends AppCompatActivity {
         LinearLayout carBtnMain = findViewById(R.id.cartBtnMain);
 
         homeBtn.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, MainActivity.class)));
-
         carBtnMain.setOnClickListener(v -> startActivity(new Intent(CartActivity.this, CartActivity.class)));
     }
 
@@ -76,7 +91,7 @@ public class CartActivity extends AppCompatActivity {
         deliveryText.setText("$" + delivery);
         totalText.setText("$" + total);
 
-        totalAmount = total; // lưu lại để dùng khi thanh toán
+        totalAmount = total;
     }
 
     private void initView() {
@@ -92,15 +107,60 @@ public class CartActivity extends AppCompatActivity {
 
     private void handleCheckout() {
         checkoutBtn.setOnClickListener(v -> {
-            if (totalAmount <= 0) {
-                // Đơn hàng trống
-                return;
-            }
+            if (totalAmount <= 0) return;
 
-            Intent intent = new Intent(CartActivity.this, VnPayWebViewActivity.class);
-            intent.putExtra("amount", totalAmount);
-            intent.putExtra("paymentUrl", "file:///android_asset/vnpay_demo.html"); // đường dẫn HTML giả lập
-            startActivity(intent);
+            String totalString = String.format("%.0f", totalAmount * 25000); // VNĐ
+
+            CreateOrder orderApi = new CreateOrder();
+            try {
+                JSONObject data = orderApi.createOrder(totalString);
+                String code = data.getString("return_code");
+                if (code.equals("1")) {
+                    String token = data.getString("zp_trans_token");
+
+                    ZaloPaySDK.getInstance().payOrder(CartActivity.this, token, "demozpdk://app", new PayOrderListener() {
+                        @Override
+                        public void onPaymentSucceeded(String transactionId, String transToken, String appTransID) {
+                            // TODO: xử lý lưu đơn hàng nếu cần
+                            Intent intent = new Intent(CartActivity.this, PaymentNotification.class);
+                            intent.putExtra("result", "Thanh toán thành công");
+                            intent.putExtra("amount", totalAmount);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onPaymentCanceled(String transToken, String appTransID) {
+                            Intent intent = new Intent(CartActivity.this, PaymentNotification.class);
+                            intent.putExtra("result", "Hủy thanh toán");
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onPaymentError(ZaloPayError zaloPayError, String transToken, String appTransID) {
+                            Intent intent = new Intent(CartActivity.this, PaymentNotification.class);
+                            intent.putExtra("result", "Lỗi thanh toán");
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
+    }
+
+    // Phải override để ZaloPay nhận callback
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initList();      // reload lại danh sách món ăn
+        calculateCard(); // cập nhật lại tổng tiền
     }
 }
