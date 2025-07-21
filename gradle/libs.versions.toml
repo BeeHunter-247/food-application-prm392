@@ -10,6 +10,7 @@ constraintlayout = "2.2.1"
 glide = "4.16.0"
 gson = "2.10.1"
 
+
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

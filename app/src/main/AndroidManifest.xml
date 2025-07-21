@@ -60,13 +60,11 @@
             android:label="Trang quản trị Admin" />
 
         <activity
-            android:name=".activity.FoodManagementActivity"
-            android:exported="false"
-            android:label="Quản lý Món ăn" />
+            android:name=".activity.AddEditFoodActivity"
+            android:exported="false" />
         <activity
-            android:name=".activity.UserManagementActivity"
-            android:exported="false"
-            android:label="Quản lý người dùng" />
+            android:name=".activity.AddEditUserActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.EditProfileActivity"
             android:exported="false"
