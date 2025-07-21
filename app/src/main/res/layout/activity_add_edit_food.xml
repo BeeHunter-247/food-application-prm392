@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:paddingHorizontal="16dp">
+        <ImageView
+            android:id="@+id/iv_back_add_food"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:padding="8dp"
+            android:layout_centerVertical="true"/>
+        <TextView
+            android:id="@+id/tv_add_edit_food_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add New Item"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ITEM NAME" android:textSize="12sp"/>
+            <EditText
+                android:id="@+id/et_food_title"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edittext_background"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="4dp"/>
+
+            <!-- THÊM TRƯỜNG NHẬP TÊN ẢNH -->
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PICTURE FILENAME" android:textSize="12sp" android:layout_marginTop="16dp"/>
+            <EditText
+                android:id="@+id/et_food_picture"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edittext_background"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:hint="e.g., pepperoni (without .jpg)"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRICE" android:textSize="12sp" android:layout_marginTop="16dp"/>
+            <EditText
+                android:id="@+id/et_food_price"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/edittext_background"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="4dp"
+                android:inputType="numberDecimal"/>
+
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="DETAILS" android:textSize="12sp" android:layout_marginTop="16dp"/>
+            <EditText
+                android:id="@+id/et_food_desc"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/edittext_background"
+                android:padding="16dp"
+                android:layout_marginTop="4dp"
+                android:gravity="top"/>
+
+            <Button
+                android:id="@+id/btn_save_food"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="32dp"
+                android:text="SAVE CHANGES"
+                android:background="@drawable/button_background_orange"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
